@@ -1,0 +1,214 @@
+# Compte-rendu Administration Linux : TP2
+
+## Groupe :
+- Aymrick COUGOULAT
+- Grégoire CHATEAUNEUF
+
+## Exercice 1 - Variables d'environnement
+
+1) Les commandes tapées par l'utilisateur sont trouvable grâce à la commande :
+```printenv PATH```
+Ce qui nous donne :
+```/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin```
+
+2) Avec la commande ```printenv```, on affiche toutes les variables d'environnements. C'est grâce à la v.e. HOME qui nous permet d'accéder à notre répertoire personnel.
+
+3) La variable d'environnement : 
+	- LANG : permet de déterminer la langue que les logiciels utilisent.
+	- PWD : permet d'afficher le chemin complet du répertoire ou l'on se situe.
+	- OLDPWD : permet d'afficher le chemin avant d'être dans notre répertoire actuel.
+	- SHELL : Affiche le chemin '/bin/bash'
+	- _ : Contient le chemin permettant d'accéder à la liste des variables d'environnement.
+
+4) Pour créer une variable local : 
+	```
+	MY_VAR="aaaa"
+	echo $MY_VAR
+	printenv
+	```
+    La variable n'est pas parmis la liste des v.e.
+
+5) En tapant la commande ```bash```, notre variable MY_VAR n'est toujours pas affiché dans les listes des variables d'environnement.
+Mais cette variable existe puisqu'on peut récupérer son contenu.
+
+6) En faisant la même chose mais en créant une variable d'environnement : 
+    ```
+    export MY_VAR="aaaaa"
+    ```
+    Une première fois, elle n'est pas affiché dans la liste des v.e. mais une fois la commande bash éxécuté. Notre v.e s'y trouve.
+
+7) Pour cette question, on écrit les commandes suivantes :
+    ```
+	export NOMS="COUGOULAT CHATEAUNEUF"
+	echo $NOMS
+    ```
+8) 
+    ```
+    echo "Bonjour à vous deux, "$NOMS
+    ```
+
+9) En mettant une valeur vide, la variable est toujours présente mais ne contient rien. La commande unset par contre
+permet de supprimer la variable.
+
+10) ```
+    echo '$HOME = '$HOME
+    ```
+
+## Exercice 2 - Contrôle de mot de passe
+
+Pour créer un nouveau fichier, nous avons utilisé la commande : "nano testpdw.sh". Nous avons ensuite edité le fichier avec le programme suivant pour répondre à l'exercice demandé :
+
+Fichier : testpdw.sh
+```
+#!/bin/bash
+read -s -p 'Saisissez votre MDP: ' a
+PASSWORD='YOLO'
+if [ $a = $PASSWORD ]; then
+	echo "Bon mot de passe"
+else
+	echo "Mauvais mot de passe"
+fi
+```
+
+Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
+
+```
+chmod u+x testpdw.sh
+./testpdw.sh
+```
+
+## Exercice 3 - Expressions rationnelles
+
+Pour créer un nouveau fichier, nous avons utilisé la commande : "nano isnumber.sh". Nous avons ensuite edité le fichier avec le programme suivant pour répondre à l'exercice demandé :
+
+Fichier : isnumber.sh
+```
+#!/bin/bash
+
+function is_number
+{
+        re='^[+-]?[0-9]+([.][0-9]+)?$'
+
+        if ! [[ $1 =~ $re ]] ; then
+                return 1
+        else
+                return 0
+        fi
+}
+
+is_number $1
+
+if [[ $? -eq 0 ]] ; then
+        echo "YES !"
+else
+        echo "ERREUR !"
+fi
+```
+Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
+
+```
+chmod u+x isnumber.sh
+./isnumber.sh 55
+```
+
+## Exercice 4 - Contrôle d'utilisateur
+
+Pour créer un nouveau fichier, nous avons utilisé la commande : "nano ctrlutilisateur.sh". Nous avons ensuite edité le fichier avec le programme suivant pour répondre à l'exercice demandé :
+
+Fichier : ctrlutilisateur.sh
+```
+#!/bin/bash
+
+if ( $1 ); then
+ echo "Utilisation :"$0 "nom_utilisateur"
+else
+ if [[ $(cut -d: -f1 /etc/passwd | grep $1 ) -eq 1 ]] ; then
+   echo "l'utilisateur existe"
+ else
+   echo "l'utilisateur n'hexiste pas"  
+ fi
+fi
+```
+Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
+
+```
+chmod u+x ctrlutilisateur.sh
+./ctrlutilisateur.sh nom_utilisateur
+```
+
+## Exercice 5 - Factorielle
+
+Pour créer un nouveau fichier, nous avons utilisé la commande : "nano factorielle.sh". Nous avons ensuite edité le fichier avec le programme suivant pour répondre à l'exercice demandé :
+
+Fichier : factorielle.sh
+```
+#!/bin/bash
+
+nbr=$1
+while [ $1 -gt 0 ] do
+	nbr = $(( $1*nbr ))
+done
+
+echo "Resultat : "$nbr
+```
+Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
+
+```
+chmod u+x factorielle.sh
+./factorielle.sh 6
+```
+
+## Exercice 6 - Le Juste Prix
+
+Pour créer un nouveau fichier, nous avons utilisé la commande : "nano prix.sh". Nous avons ensuite edité le fichier avec le programme suivant pour répondre à l'exercice demandé :
+
+Fichier : prix.sh
+```
+#!/bin/bash
+
+resultat = $(($RANDOM % 1000))
+$a = 0
+
+while [[ $resultat -ne $a ]] do
+	read -p 'Saisissez votre prix: ' a'\n'
+	if [[ $resultat -lt $a ]] ; then
+		echo "C'EST MOINS !\n"
+	else
+		echo "C'EST PLUS !\n"
+	fi
+done
+echo "C'EST GAGNE !"
+```
+Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
+
+```
+chmod u+x prix.sh
+./prix.sh
+```
+## Exercice 7 - Statistiques
+
+Pour créer un nouveau fichier, nous avons utilisé la commande : "nano statistique.sh". Nous avons ensuite edité le fichier avec le programme suivant pour répondre à l'exercice demandé :
+
+Fichier : statistique.sh
+```
+#!/bin/bash
+
+resultat = $(($RANDOM % 1000))
+$a = 0
+
+while [[ $resultat -ne $a ]] do
+	read -p 'Saisissez votre prix: ' a'\n'
+	if [[ $resultat -lt $a ]] ; then
+		echo "C'EST MOINS !\n"
+	else
+		echo "C'EST PLUS !\n"
+	fi
+done
+echo "C'EST GAGNE !"
+```
+Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
+
+```
+chmod u+x statistique.sh
+./statistique.sh
+```
