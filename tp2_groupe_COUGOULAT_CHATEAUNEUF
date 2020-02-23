@@ -170,7 +170,7 @@ resultat = $(($RANDOM % 1000))
 $a = 0
 
 while [[ $resultat -ne $a ]] do
-	read -p 'Saisissez votre prix: ' a'\n'
+	read -p 'Saisissez votre prix: ' a
 	if [[ $resultat -lt $a ]] ; then
 		echo "C'EST MOINS !\n"
 	else
@@ -193,18 +193,56 @@ Fichier : statistique.sh
 ```
 #!/bin/bash
 
-resultat = $(($RANDOM % 1000))
-$a = 0
+function is_number
+{
+        re='^[+-]?[0-9]+([.][0-9]+)?$'
 
-while [[ $resultat -ne $a ]] do
-	read -p 'Saisissez votre prix: ' a'\n'
-	if [[ $resultat -lt $a ]] ; then
-		echo "C'EST MOINS !\n"
-	else
-		echo "C'EST PLUS !\n"
-	fi
+        if ! [[ $1 =~ $re ]] ; then
+                return 1
+        else
+                return 0
+        fi
+}
+
+values=()
+
+while :
+do
+
+	read -p 'Nombre à ajouter: ' a
+
+        if [ "$value" = "e" ]; then
+                break
+        fi
+
+        values+=($value)
+
 done
-echo "C'EST GAGNE !"
+
+max=-100
+min=100
+total=0
+
+for el in "${values[@]}"
+do
+        if [ "$el" -gt "100" ] || [ "$el" -lt "-100" ]; then
+                echo "Seuls les nombres réels entre -100 et 100 sont pris en compte"
+                exit 1
+        fi
+
+        if [ $el -gt $max ]; then
+                let max=$el
+        fi
+
+        if [ $el -lt $min ]; then
+                let min=$el
+        fi
+        
+        let total=total+$el
+done
+
+let moyenne=$total/${#values[@]}
+echo "Moy: $moyenne; Max: $max; Min: $min"
 ```
 Ensuite, les commandes suivantes sont éxécutés pour rendre le script éxécutable :
 
